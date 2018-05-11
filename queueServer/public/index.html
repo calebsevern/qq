@@ -1,0 +1,89 @@
+<!doctype html>
+<html>
+  <head>
+    <style>
+      table {
+        text-align: left;
+        border-collapse: collapse;
+      }
+
+      td, th {
+        border: 1px solid rgba(0, 0, 0, .2);
+        padding: 4px 8px;
+      }
+    </style>
+  </head>
+  <body>
+    <div style="display: inline-block; width: 600px;">
+      <h3>Queue (<span class="num-queue-items">0</span>)</h3>
+      <table>
+        <thead>
+          <th>ID</th>
+          <th>Created</th>
+          <th>Data</th>
+        </thead>
+        <tbody class="queue"></tbody>
+      </table>
+    </div>
+
+    <div style="display: inline-block; width: 600px;">
+      <h3>Locked/Processing (<span class="num-processing">0</span>)</h3>
+      <table>
+        <thead>
+          <th>ID</th>
+          <th>Created</th>
+          <th>Data</th>
+        </thead>
+        <tbody class="locked"></tbody>
+      </table>
+    </div>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script>
+      $(function() {
+        function getStatus() {
+          $.get('http://localhost:3000/status', function(data) {
+            $('.queue').html('');
+            $('.num-queue-items').html(data.queue.length);
+            for (var i = 0; i < data.queue.length; i += 1) {
+              var queueRow = $('<tr>').addClass('queue-item');
+              var queueId = $('<td>').html(data.queue[i].id);
+              var queueCreated = $('<td>').html(data.queue[i].created);
+              var body = '';
+              try {
+                body = JSON.stringify(data.queue[i].body);
+              } catch (e) {
+                body = data.queue[i].body;
+              }
+              var queueData = $('<td>').html(body);
+              $(queueRow).append(queueId).append(queueCreated).append(queueData);
+              $('.queue').append(queueRow);
+            }
+
+            $('.locked').html('');
+            $('.num-processing').html(Object.keys(data.lockedMessages).length);
+            for (var key in data.lockedMessages) {
+              var item = data.lockedMessages[key];
+              var lockedRow = $('<tr>').addClass('locked-item');
+              var lockedId = $('<td>').html(item.id);
+              var lockedCreated = $('<td>').html(item.created);
+              var body = '';
+              try {
+                body = JSON.stringify(item.body);
+              } catch (e) {
+                body = item.body;
+              }
+              var lockedData = $('<td>').html(body);
+              $(lockedRow).append(lockedId).append(lockedCreated).append(lockedData);
+              $('.locked').append(lockedRow);
+            }
+
+            setTimeout(getStatus, 1000);
+          });
+        }
+
+        getStatus();
+      });
+    </script>
+  </body>
+</html>
