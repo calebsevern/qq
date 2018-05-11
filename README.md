@@ -19,7 +19,7 @@ node demo/index.js
 Populates the queue, spawns a few child processes, and runs queue tasks (get/delete) in parallel.
 You can see this happening in real(-ish) time at `localhost:3000/web`.
 
-![screenshot](https://i.imgur.com/ys0O5i1.png)
+![screenshot](https://i.imgur.com/dAtjJZ7.gif)
 
 ### Broker / server endpoints
 ```
