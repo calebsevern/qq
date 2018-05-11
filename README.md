@@ -5,12 +5,21 @@ cd queueServer && yarn run start
 Can view queue contents (as well as currently processing/locked messages) at `localhost:3000/web`.
 You can also dump queue state with `queueObject.status()`.
 
+### Running tests for the queue broker / server
+```
+cd queueServer && yarn run test
+```
+
+![screenshot](https://i.imgur.com/XDmYVE9.png)
+
 ### Client lib demo
 ```
 node demo/index.js
 ```
 Populates the queue, spawns a few child processes, and runs queue tasks (get/delete) in parallel.
 You can see this happening in real(-ish) time at `localhost:3000/web`.
+
+![screenshot](https://i.imgur.com/ys0O5i1.png)
 
 ### Broker / server endpoints
 ```
@@ -35,7 +44,6 @@ Returns a JSON representation of queue state, for display and/or debugging.
 {
   queue: [...],
   lockedMessages: { ... },
-  ttl: number (ms),
 }
 ```
 ---
