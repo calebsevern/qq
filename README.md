@@ -1,18 +1,18 @@
-##Start the queue broker/server
+### Start the queue broker / server
 ```
 cd queueServer && yarn run start
 ```
 Can view queue contents (as well as currently processing/locked messages) at `localhost:3000/web`.
 You can also dump queue state with `queueObject.status()`.
 
-##Client lib demo:
+### Client lib demo
 ```
 node demo/index.js
 ```
 Populates the queue, spawns a few child processes, and runs queue tasks (get/delete) in parallel.
 You can see this happening in real(-ish) time at `localhost:3000/web`.
 
-##Broker/server endpoints
+### Broker / server endpoints
 ```
 GET /web
 ```
@@ -23,8 +23,7 @@ Returns a web page displaying the current state of the queue, using the `/status
 ```
 <html ...>
 ```
-
-
+---
 ```
 GET /status
 ```
@@ -39,7 +38,7 @@ Returns a JSON representation of queue state, for display and/or debugging.
   ttl: number (ms),
 }
 ```
-
+---
 ```
 GET /get
 ```
@@ -58,7 +57,7 @@ unavailable to other clients.
   },
 }
 ```
-
+---
 ```
 POST /add
 ```
@@ -75,7 +74,7 @@ Returns the uuid of the message, if created successfully.
   messageId: string,
 }
 ```
-
+---
 ```
 POST /delete
 ```
@@ -90,13 +89,15 @@ Returns an error message on failure, and the message uuid if successful.
   messageId: string,
 }
 ```
-
+---
 ```
-POST /status
+POST /purge
 ```
 No parameters.
 
-Returns a 'succeeded' bool.
+Clears the message queue and all locked messages.
+
+Returns a bool indicating whether the operation was successful.
 
 ```
 {
